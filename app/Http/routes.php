@@ -25,6 +25,9 @@ Route::get('member/logout','MemberController@logout');
 
 Route::post('member/id_check','MemberController@id_check');
 
+/*
+ * 아직 완성되지 않음 .. 다른 조원들의 역할들
+ *
 // 소개
 Route::get('/intro', 'IntroController@index');
 
@@ -88,7 +91,7 @@ Route::get('designerpage/modify','MypageController@designer_modify');
 Route::post('designerpage/modify/{m_num}',[
     'as' => 'designerpage_update',
     'uses' => 'MypageController@designerpage_update'
-]);
+]);*/
 
 // 디자이너 & 포트로그
 Route::post('designer/pf_view','DesignerController@pf_view');

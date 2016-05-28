@@ -16,6 +16,7 @@ class DesignerController extends Controller{
         $this->model=new Designer_model();
     }
 
+    //디자이너 리스트 뷰로 가는 곳
     public function index($value = 'nomal'){
 
         $m_list=$this->model->m_list($value);
@@ -24,10 +25,14 @@ class DesignerController extends Controller{
 
     }
 
+    //디자이너 포트로그 페이지
+    //아직 디자인 단계
     public function show($id){
         return view('designer.portlog')->with('m_num',$id);
     }
 
+    //디자이너 포트폴리오로 가는 부분
+    //ajax 활용을 위해 각종 변수들을 계산해서 넘겨줌
     public function portfolio($m_num = null){
 
         if($m_num) {
@@ -43,6 +48,7 @@ class DesignerController extends Controller{
         }
     }
 
+    //받은 변수들을 이용해 ajax 무한스크롤을 하는 부분
     public function post(Request $request){
 
         $group_no = $request->input('group_no');
@@ -60,6 +66,8 @@ class DesignerController extends Controller{
         }
 
     }
+
+    //디자이너 소개페이지로 가는 부분
     public function intro($m_num){
         $intro=$this->model->intro($m_num);
         $name='소개';
@@ -68,6 +76,7 @@ class DesignerController extends Controller{
             ->with('intro',$intro[0]);
     }
 
+    //디자이너 경력 페이지로 가는 부분
     public function school($m_num){
         $name='경력,학력';
         $academy_list=$this->model->academy($m_num);
@@ -84,8 +93,10 @@ class DesignerController extends Controller{
             ->with('licenese_list',$licenese_list);
     }
 
+    //디자이너가 완료된 프로젝트로 가는부분
+    //완료된 평점등을 확인가능
     public function career($m_num){
-        $name='End Project';
+        $name='평점';
         $grade=$this->model->grade($m_num);
         $web_count=$this->model->web_count($m_num);
         $app_count=$this->model->app_count($m_num);
@@ -99,19 +110,24 @@ class DesignerController extends Controller{
                                        ->with('m_num',$m_num);
 
     }
+
+
+    //평점 페이지에서 끝난 프로젝트의
+    //하나하나 평점확인 가능
+    //ajax형식 활용
     public function user_grade(Request $request){
 
         $m_num = $request->input('m_num');
         $pj_num = $request->input('pj_num');
-
-
         $one_grade=$this->model->end_grade($m_num,$pj_num);
-
 
         echo json_encode(array('grade',$one_grade[0]));
 
     }
 
+
+    //모달창을 눌렀을때 알맞은 그림을 ajax 형식을 통해
+    //DB에서 불러와 json형식으로 보내주는 곳
     public function pf_view(Request $request)
     {
         $m_num=$request->input('m_num');
@@ -119,10 +135,11 @@ class DesignerController extends Controller{
 
         $modal_view=$this->model->modal_view($m_num,$pf_num);
 
-
         echo json_encode($modal_view[0]);
     }
 
+    //모달창을 띄어 버튼을 눌렀을때 ajax를 이용하여
+    //그림이 바뀌도록 할수 있게 정보들을 DB 불러와 json형식으로 보내주는 곳
     public function pn_view(Request $request)
     {
         $pf_num=$request->input('pf_num');
