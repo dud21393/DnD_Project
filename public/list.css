@@ -1,0 +1,52 @@
+.container {
+    margin: 0 auto;
+    width: 1000px;
+    height: auto;
+    border-radius:30px
+}
+
+.service_info {
+    margin: 10px auto;
+    width: 80%;
+    height: 90px;
+    background-color: #CCCCCC;
+    border-radius:30px;
+    text-align:center;
+}
+
+#sub_menu_btn {
+    margin : auto;
+    margin-left: 82px;
+    margin-right: 82px;
+    margin-top: 30px;
+    display: inline-block;
+    width: 19%;
+    color: white;
+    background-color: #213B96;
+}
+
+.middle_container{
+    margin: 0 auto;
+    width: 1000px;
+}
+.middle{
+    text-align:center;
+    background-color:red;
+    width:1000px;
+    margin :0 auto;
+}
+.col-md-4{
+    margin-left:71px;
+    border:1px solid;
+    width:250px;
+    height:280px;
+    background-color:white;
+    border-radius:30px;
+}
+.face_img{
+    margin:0 auto;
+    background-color:blue;
+    width:150px;
+    height:140px;
+    border-radius:70px
+}
