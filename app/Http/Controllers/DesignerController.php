@@ -128,8 +128,7 @@ class DesignerController extends Controller{
 
     //모달창을 눌렀을때 알맞은 그림을 ajax 형식을 통해
     //DB에서 불러와 json형식으로 보내주는 곳
-    public function pf_view(Request $request)
-    {
+    public function pf_view(Request $request){
         $m_num=$request->input('m_num');
         $pf_num=$request->input('pf_num');
 
@@ -140,8 +139,7 @@ class DesignerController extends Controller{
 
     //모달창을 띄어 버튼을 눌렀을때 ajax를 이용하여
     //그림이 바뀌도록 할수 있게 정보들을 DB 불러와 json형식으로 보내주는 곳
-    public function pn_view(Request $request)
-    {
+    public function pn_view(Request $request){
         $pf_num=$request->input('pf_num');
         $button=$request->input('button');
 

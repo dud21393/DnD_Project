@@ -51,6 +51,7 @@ class Designer_model extends Model
 
         return $result;
     }
+
     //디자이너 경력 학력 등을 불러온다.
     public function academy($m_num){
         $result=DB::table('academy')
@@ -59,6 +60,8 @@ class Designer_model extends Model
         return $result;
 
     }
+
+    //디자이너 스킬을 불러온다.
     public function skill($m_num){
         $result=DB::table('skill')
             ->where('m_num','=',$m_num)->get();
@@ -66,6 +69,8 @@ class Designer_model extends Model
         return $result;
 
     }
+
+    //디자이너 경력을 불러온다.
     public function career($m_num){
         $result=DB::table('career')
             ->where('m_num','=',$m_num)->get();
@@ -73,12 +78,16 @@ class Designer_model extends Model
         return $result;
 
     }
+
+    //디자이너 수상 경력을 불러온다.
     public function prize($m_num){
         $result=DB::table('prize')
             ->where('m_num','=',$m_num)->get();
 
         return $result;
     }
+
+    //디자이너의 자격증 등을 불러온다.
     public function licenese($m_num){
         $result=DB::table('licenese')
             ->where('m_num','=',$m_num)->get();
