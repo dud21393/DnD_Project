@@ -185,7 +185,6 @@ class Designer_model extends Model
     public function pn_view($pf_num,$button){
 
         if($button =='left') {
-
             $result = DB::select('select *,@num:=@num+1 as num
                             from portfolio,(SELECT @num:=0) num
                             where m_num=1 AND pf_num < ' . $pf_num . '

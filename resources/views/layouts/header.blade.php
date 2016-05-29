@@ -16,7 +16,15 @@
         @else
         <a href="/member/logout" >로그아웃</a>
         @endif
-        <a href="/help/index">고객센터</a>
+        @if(Session::has('m_info'))
+            <!-- div_member가 1이면 디자이너 -->
+            @if(Session::get('div_member') == 1)
+                <a href="/designer_page">마이페이지</a>
+            <!-- div_member가 2이면 개발사 -->
+            @elseif(Session::get('div_member' == 2))
+                <a href="/companypage/">마이페이지</a>
+            @endif
+        @endif
     </div>
 
     <!-- Login Modal -->
@@ -123,9 +131,10 @@
     <div class="menu_bar">
         <a href="#" id="top_menu_btn" class="btn btn-default">소개</a>
         <a href="" id="top_menu_btn" class="btn btn-default">프로젝트</a>
-        <a href="/designer" id="top_menu_btn" class="btn btn-default">디자이너</a>
-        <a href="/companypage" id="top_menu_btn" class="btn btn-default">마이페이지</a>
+        <a href="/designer" id="top_menu_btn" class="btn btn-default">디자이너 찾기</a>
         <a href="/work" id="top_menu_btn" class="btn btn-default">협업</a>
+        <a href="/help/index" id="top_menu_btn" class="btn btn-default">고객센터</a>
+
     </div>
     
     <script>

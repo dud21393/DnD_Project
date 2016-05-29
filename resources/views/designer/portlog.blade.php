@@ -1,47 +1,56 @@
 <style>
     .portlog_container {
-    margin: 80px auto;
-    position: relative;
-    width: 600px;
-    height: 600px;
+        margin: 80px auto;
+        position: relative;
+        width: 800px;
+        height: 800px;
     }
 
     .face_btn {
-    position: absolute;
-    top: 170px;
-    left: 170px;
-    width: 250px;
-    height: 250px;
-    text-align: center;
-    line-height: 250px;
-    font-size: 30px;
-    border-radius: 250px;
-    background-color: white;
-    z-index: 1;
+        position: absolute;
+        top: 170px;
+        left: 170px;
+        width: 250px;
+        height: 250px;
+        text-align: center;
+        line-height: 250px;
+        font-size: 30px;
+        border-radius: 250px;
+        background-color: white;
+        z-index: 1;
     }
 
     .diamond {
-    display: inline-block;
-    position: absolute;
-    margin: 10px;
-    width: 200px;
-    height: 200px;
-    -ms-transform: rotate(45deg); /* IE 9 */
-    -webkit-transform: rotate(45deg); /* Safari */
-    transform: rotate(45deg); /* Standard syntax */
-    background-color: #FF7E4E;
-    border-radius: 20px;
-    }
+        display: inline-block;
+        position: absolute;
+        margin: 10px;
+        width: 200px;
+        height: 200px;
+        -ms-transform: rotate(45deg); /* IE 9 */
+        -webkit-transform: rotate(45deg); /* Safari */
+        transform: rotate(45deg); /* Standard syntax */
+        background-color: #FF7E4E;
+        border-radius: 20px;
+        }
 
     .diamond:hover {
-    cursor: pointer;
-    background-color: #E36133;
+        cursor: pointer;
+        background-color: #E36133;
     }
 
     .top_btn { top:20px; left: 190px; }
-    .left_btn { top:190px; left: 20px; }
-    .right_btn { top:190px; right: 20px; }
-    .down_btn { bottom:20px; left: 190px; }
+    .left_btn { top:190px; left: 30px; }
+    .right_btn { top:190px; right: 230px; }
+    .down_btn { bottom:230px; left: 190px; }
+
+    .sub_container{
+        text-align: center;
+        border: 1px solid;
+        margin-top: 500px;
+        float: right;
+        width:100px;
+        height: 130px;
+    }
 
 
 </style>
@@ -53,6 +62,20 @@
         <a href="/designer/portfolio/{{$m_num}}"><div class="diamond left_btn">포트폴리오</div></a>
         <a href="/designer/school/{{$m_num}}"><div class="diamond right_btn">경력</div></a>
         <a href="/designer/career/{{$m_num}}"> <div class="diamond down_btn">참여,이력</div></a>
+
+        @if($m_num != 2)<!-- "2" 에 들어갈 자리는 세션값 -->
+        <div class="sub_container">
+            <div>
+                <img src="{{asset('img/heart.png')}}">
+            </div>
+            <br>
+            <div>
+            <a href="/desinger/">
+                <img src="">
+            </a>
+            </div>
+        </div>
+        @endif
     </div>
 
 </body>

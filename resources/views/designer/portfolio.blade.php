@@ -112,8 +112,9 @@
         });
 
     </script>
-    <!-- Modal -->
 
+
+    <!-- Modal -->
     <script>
         function picture(m_num,pf_num){
             $.ajax({

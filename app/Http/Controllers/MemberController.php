@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Events\BeautyLogined;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\member;
@@ -18,12 +17,16 @@ class MemberController extends Controller{
         $pw = $request->input('m_pw');
         
         $result = DB::select ("select * from members where m_id = '{$id}' and m_pw = '{$pw}'");
-        //dd($result);
+
+        //dd($result[0]->m_num);
 
         if($result)
         {
+
             Session::put('m_info', $result);
-            Event::fire(new BeautyLogined($request->ip()));
+            Session::put('div_member',$result[0]->div_member);
+            Session::put('m_num',$result[0]->m_num);
+
         }else{
             return view('layouts.MemberError');
         }

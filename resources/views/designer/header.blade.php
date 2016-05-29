@@ -27,12 +27,12 @@
             <div class="menu_btn_con">
                 <a href="/designer/school/1" data-transition="slide">
                     <div class="portlog_btn">
-                        학력
+                        경력
                     </div>
                 </a>
                 <a href="/designer/career/1">
                     <div class="portlog_btn">
-                        경력
+                        참여이력
                     </div>
                 </a>
                 <a href="/designer/portfolio/1">
