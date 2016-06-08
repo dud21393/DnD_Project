@@ -20,6 +20,10 @@
 
     <!-- 회사정보 불러오기(수정) -->
 
+    {{--<textarea rows="7"cols="30" name="cp_info"> {{ $result->cp_info }}</textarea>
+    <input type="text" name="cp_represent" value="{{ $result->cp_represent }}" maxlength="10"/>--}}
+
+
     @foreach($results as $result)
         @if($result)
             <form method="post" action="/companypage/update/{{$result->m_num}}" >
@@ -28,11 +32,9 @@
                 <input type="text" name='m_name' value="{{ $result->m_name }}" maxlength="20"/>
                 <input type="text" name='m_phone' value="{{ $result->m_phone }}" maxlength="20"/>
                 <input type="text" name='m_email' value="{{ $result->m_email }}" maxlength="20"/>
-                <textarea rows="7"cols="30" name="cp_info"> {{ $result->cp_info }}</textarea>
-                <input type="text" name="cp_represent" value="{{ $result->cp_represent }}" maxlength="10"/>
                 <input type="submit" value="수정하기">
             </form>
             @endif
-            @endforeach
+@endforeach
 
 @include('layouts.footer')

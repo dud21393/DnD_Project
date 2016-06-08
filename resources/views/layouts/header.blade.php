@@ -1,10 +1,10 @@
 
-<link href="{{{ asset('css/header.css') }}}" rel="stylesheet">
+<link href="{{ asset('css/header.css') }}" rel="stylesheet">
 
   <div class="header">
    
     <div class="title">
-        <img class="logo" src="{{{ asset('img/logo.png') }}}" alt="D&D">
+        <img class="logo" src="{{ asset('img/logo.png') }}" alt="D&D">
         <a href="/">Designer & Developer</a>
     </div>
     
@@ -14,17 +14,16 @@
         <a href="#" data-toggle="modal" data-target="#loginModal" >로그인</a>
         <a href="#" data-toggle="modal" data-target="#joinModal" >회원가입</a>
         @else
-        <a href="/member/logout" >로그아웃</a>
-        @endif
-        @if(Session::has('m_info'))
-            <!-- div_member가 1이면 디자이너 -->
+                <!-- div_member가 1이면 디자이너(designerpage) -->
             @if(Session::get('div_member') == 1)
-                <a href="/designer_page">마이페이지</a>
-            <!-- div_member가 2이면 개발사 -->
-            @elseif(Session::get('div_member' == 2))
-                <a href="/companypage/">마이페이지</a>
+                <a href="/designerpage">마이페이지</a>
+                <!-- div_member가 2이면 개발사(companypage) -->
+            @elseif(Session::get('div_member') == 2)
+                <a href="/companypage">마이페이지</a>
             @endif
+            <a href="/member/logout" >로그아웃</a>
         @endif
+
     </div>
 
     <!-- Login Modal -->
@@ -130,7 +129,7 @@
 
     <div class="menu_bar">
         <a href="#" id="top_menu_btn" class="btn btn-default">소개</a>
-        <a href="" id="top_menu_btn" class="btn btn-default">프로젝트</a>
+        <a href="/projectList" id="top_menu_btn" class="btn btn-default">프로젝트</a>
         <a href="/designer" id="top_menu_btn" class="btn btn-default">디자이너 찾기</a>
         <a href="/work" id="top_menu_btn" class="btn btn-default">협업</a>
         <a href="/help/index" id="top_menu_btn" class="btn btn-default">고객센터</a>
@@ -155,7 +154,7 @@
                     type:'post',     //어떤 형식으로 전달할 것인가?
                     data: form_data, //객체형체로 기술
                     success:function(data){ //서버가 리턴해준 값
-                        global_id_check = data
+                        global_id_check = data;
                         if(data) {
                             $('#inputID').css('border', '1px solid red');
                             $('#inputID').css('box-shadow', '0 0 5px 0 red');

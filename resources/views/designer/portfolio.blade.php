@@ -1,30 +1,50 @@
 @include('designer.header')
 <head>
 <style>
+    a{
+        text-decoration: none;
+    }
     .portfolio_container{
         width: 100%;
-        background-color: #F4984F;
     }
-    .main_container{
+    #main{
         margin :0 auto;
         width: 1000px;
-        border:1px solid;
-        background-color:gray;
+        background-color: #0f0f0f;
+
     }
-    #picture{
+    .d_one{
+        display: inline-block ;
+        height:350px ;
+        width: 1000px ;
+        border:1px solid #000;
+    }
+    #d_two{
         display: inline-block;
+        margin-left:25px;
+        height:350px;
+        width: 300px;
+        border:1px solid #000;
+    }
+    #d_three{
+        display: inline-block;
+        margin-left:25px;
+        height:350px;
+        width: 300px;
+        border:1px solid #000;
+    }
+
+    .picture{
+        display: inline-block !important ;
         margin-top:30px;
         margin-left:25px;
-        border:1px solid;
         width:300px;
         height:350px;
-        border-radius:10px;
         cursor:pointer;
     }
-    #pf_img{
-        width:300px;
-        height:350px;
-        border-radius:10px;
+    .pf_img{
+        width:290px;
+        height:340px;
     }
 
     .modal.modal-center {
@@ -79,16 +99,10 @@
         width: 800px;
         height:500px;
     }
-    .glyphicon.glyphicon-chevron-left {
-        font-size: 75px;
-    }
-    .glyphicon.glyphicon-chevron-right {
-        font-size: 75px;
-    }
+
 </style>
 </head>
 <body>
-
 
 <script>
 
@@ -97,13 +111,13 @@
             var total_groups='{{$total_group}}';
             var m_num = '{{$m_num}}';
 
-            $(".main_container").load("/designer/post",{'group_no':track_load,'m_num':m_num},function(){track_load++;});
+            $("#main").load("/designer/post",{'group_no':track_load,'m_num':m_num},function(){track_load++;});
 
             $(window).scroll(function(){
                 if($(window).scrollTop()+window.innerHeight== $(document).height()){
                     if(track_load <= total_groups){
                         $.post('/designer/post',{'group_no':track_load,'m_num':m_num},function(data){
-                            $('.main_container').append(data);
+                            $('#main').append(data);
                             track_load++;
                         });
                     }
@@ -169,6 +183,7 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
+
                         <button id="pf_picture" class="glyphicon glyphicon-chevron-left" onclick="pn_view('left')">
                         </button>
 
@@ -176,7 +191,6 @@
 
                         <button id="pf_picture" class="glyphicon glyphicon-chevron-right" onclick="pn_view('right')" >
                         </button>
-
                 </div>
                 <div class="modal-footer">
                 </div>
@@ -185,9 +199,130 @@
     </div>
     <div class="portfolio_container">
 
-            <div class="main_container">
+        <script>
 
-            </div>
+            function drag(pf_num){
+                var picimg = "#picimg_"+pf_num;
 
+
+                $(function(){
+
+                    $( "a",'.main_container' ).draggable({
+                        cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                        revert: "invalid", // when not dropped, the item will revert back to its initial position
+                        containment: "document",
+                        helper: "clone",
+                        cursor: "move"
+                    });
+
+                   $(picimg).draggable({
+                       addClasses:false,
+                       helper:'clone'
+                   });
+                });
+
+                $('#one').droppable({
+                    addClasses:false,
+                    drop: function (event, ui) {
+                        deleteimage(ui.draggable);
+                    }
+                });
+
+                function deleteimage($item){
+                    $item.fadeOut(function(){
+
+                        var $list = $("div",".main_container2").length ?
+                                $("div",".main_container2") :
+                                $("<div class='d_one' />").appendTo(".main_container2");
+
+                        $item.appendTo($list).fadeIn(function(){
+                            $item
+                                    .animate({ width: "300px" })
+                                    .find( "img" )
+                                    .animate({ height: "350px" });
+                        });
+                    })
+                }
+            }
+
+
+        </script>
+        <script>
+            $(function() {
+                // there's the gallery and the trash
+                var $gallery = $( "#gallery" ),
+                        $trash = $( "#trash" );
+
+                // let the gallery items be draggable
+                $( "li", $gallery ).draggable({
+                    cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                    revert: "invalid", // when not dropped, the item will revert back to its initial position
+                    containment: "document",
+                    helper: "clone",
+                    cursor: "move"
+                });
+
+                // let the trash be droppable, accepting the gallery items
+                $trash.droppable({
+                    accept: "#gallery > li",
+                    drop: function( event, ui ) {
+                        deleteImage( ui.draggable );
+                    }
+                });
+
+                // let the gallery be droppable as well, accepting items from the trash
+                $gallery.droppable({
+                    accept: "#trash li",
+                    drop: function( event, ui ) {
+                        recycleImage( ui.draggable );
+                    }
+                });
+
+                // image deletion function
+                 function deleteImage( $item ) {
+                    $item.fadeOut(function() {
+                        var $list = $( "ul", $trash ).length ?
+                                $( "ul", $trash ) :
+                                $( "<ul class='gallery ui-helper-reset'/>" ).appendTo( $trash );
+
+                        $item.find( "a.ui-icon-trash" ).remove();
+                        $item.appendTo( $list ).fadeIn(function() {
+                            $item
+                                    .animate({ width: "48px" })
+                                    .find( "img" )
+                                    .animate({ height: "36px" });
+                        });
+                    });
+                }
+
+                // image recycle function
+                var trash_icon = "<a href='link/to/trash/script/when/we/have/js/off' title='Delete this image' class='ui-icon ui-icon-trash'>Delete image</a>";
+                function recycleImage( $item ) {
+                    $item.fadeOut(function() {
+                        $item
+                                .find( "a.ui-icon-refresh" )
+                                .remove()
+                                .end()
+                                .css( "width", "96px")
+                                .append( trash_icon )
+                                .find( "img" )
+                                .css( "height", "72px" )
+                                .end()
+                                .appendTo( $gallery )
+                                .fadeIn();
+                    });
+                }
+            });
+        </script>
+
+        <div id="one" class="main_container2" style="width: 1000px; height: 500px; background-color: #1b6d85; margin: 0 auto;">
+
+        </div>
     </div>
+
+<div class="main_container" id="main">
+
+</div>
+
 </body>
+

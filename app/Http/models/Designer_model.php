@@ -11,43 +11,60 @@ class Designer_model extends Model
 
     //디자이너의 인원수를 구해준다.
     public function m_list($value){
-        //바로들어갔을때
-        if($value == 'nomal'){
+        //바로들어갔을때 OR 진행한 프로젝트 순
+        if($value =='project' || $value == 'nomal'){
             $result = DB::table('members')
                 ->select(DB::raw('(select count(m_num)
                                            from   portfolio
-                                           where  members.m_num=portfolio.m_num) as pt_count,
+                                           where  members.m_num=portfolio.m_num) as pj_count,
                               (select  count(c.m_num)
 		                                   from contract c,projects p
 		                                   where c.pj_num=p.pj_num AND p.st_num=5 AND members.m_num=c.m_num
-                                           group by c.m_num) as pj_count, m_num , m_name'))
-                ->where('div_member', '=', '1')->paginate(2);
-        //프로젝트의 갯수가 많은 순으로
-        }elseif($value =='project'){
-            $result = DB::table('members')
-                ->select(DB::raw('(select count(m_num)
-                                           from   portfolio
-                                           where  members.m_num=portfolio.m_num) as pt_count,
-                              (select  count(c.m_num)
-		                                   from contract c,projects p
-		                                   where c.pj_num=p.pj_num AND p.st_num=5 AND members.m_num=c.m_num
-                                           group by c.m_num) as pj_count, m_num , m_name'))
+                                           group by c.m_num) as pt_count, members.m_num , members.m_name, designer.ds_info, members.m_face'))
+                ->join('designer','designer.m_num','=','members.m_num')
                 ->where('div_member', '=', '1')
-                ->orderBy('pt_count','desc')->paginate(2);
+                ->orderBy('pt_count','desc')->paginate(6);
+/*
+ * select (select count(m_num) from portfolio where members.m_num=portfolio.m_num) as pt_count,
+(select  count(c.m_num)from contract c,projects p
+where c.pj_num=p.pj_num AND p.st_num=5 AND members.m_num=c.m_num
+group by c.m_num) as pj_count, m_num , m_name
+from members
+where div_member=1
+order by pt_count desc
+ * */
             //포트폴리오의 갯수가 많은 순으로
         }elseif($value =='portfolio'){
             $result = DB::table('members')
                 ->select(DB::raw('(select count(m_num)
                                            from   portfolio
-                                           where  members.m_num=portfolio.m_num) as pt_count,
+                                           where  members.m_num=portfolio.m_num) as pj_count,
                               (select  count(c.m_num)
 		                                   from contract c,projects p
 		                                   where c.pj_num=p.pj_num AND p.st_num=5 AND members.m_num=c.m_num
-                                           group by c.m_num) as pj_count, m_num , m_name'))
-                ->where('div_members', '=', '1')
+                                           group by c.m_num) as pt_count, members.m_num , members.m_name, designer.ds_info, members.m_face'))
+                ->where('div_member', '=', '1')
+                ->join('designer','designer.m_num','=','members.m_num')
                 ->orderBy('pj_count','desc')
-                ->paginate(2);
+                ->paginate(6);
         }
+
+        return $result;
+    }
+
+    public function designer_search($m_name){
+        $result = DB::table('members')
+            ->select(DB::raw('(select count(m_num)
+                                           from   portfolio
+                                           where  members.m_num=portfolio.m_num) as pj_count,
+                              (select  count(c.m_num)
+		                                   from contract c,projects p
+		                                   where c.pj_num=p.pj_num AND p.st_num=5 AND members.m_num=c.m_num
+                                           group by c.m_num) as pt_count, members.m_num , members.m_name, designer.ds_info'))
+            ->join('designer','designer.m_num','=','members.m_num')
+            ->where('div_member', '=', '1')
+            ->where('members.m_name','like','%'.$m_name.'%')
+            ->paginate(6);
 
         return $result;
     }
@@ -58,8 +75,24 @@ class Designer_model extends Model
             ->where('m_num','=',$m_num)->get();
 
         return $result;
-
     }
+    //학력 삭제
+    public function academy_delete($ac_num){
+        DB::table('academy')
+            ->where('ac_num', '=', $ac_num)->delete();
+    }
+
+    public function academy_add($academy){
+        $id=DB::table('academy')
+            ->insertGetId(array('ac_name'=>$academy['ac_name'],
+                'ac_specialty'=>$academy['ac_specialty'],
+                'ac_start_date'=>$academy['start_year'].'-'.$academy['start_month'],
+                'ac_end_date'=>$academy['end_year'].'-'.$academy['end_month'],
+                'm_num'=>$academy['m_num']));
+        return $id;
+    }
+    ///////////////////////////////////////////
+
 
     //디자이너 스킬을 불러온다.
     public function skill($m_num){
@@ -69,7 +102,20 @@ class Designer_model extends Model
         return $result;
 
     }
-
+    //추가
+    public function add_skill($skill){
+        $id = DB::table('skill')
+            ->insertGetId(
+                array('sk_name'=>$skill['sk_name'],'sk_grade'=>$skill['sk_grade'],'sk_time'=>$skill['sk_time'],'m_num'=>$skill['m_num'])
+            );
+        return $id;
+    }
+    //삭제
+    public function delete_skill($sk_num){
+        DB::table('skill')
+            ->where('sk_num', '=', $sk_num)->delete();
+    }
+    ///////////////////////////////////////////
     //디자이너 경력을 불러온다.
     public function career($m_num){
         $result=DB::table('career')
@@ -78,6 +124,25 @@ class Designer_model extends Model
         return $result;
 
     }
+    public function career_add($cr_info){
+        $id=DB::table('career')
+            ->insertGetId(array('cr_name'=>$cr_info['cr_name'],
+                'cr_content'=>$cr_info['cr_content'],
+                'cr_position'=>$cr_info['cr_position'],
+                'cr_start_date'=>$cr_info['cr_start_date'],
+                'cr_end_date'=>$cr_info['cr_end_date'],
+                'm_num'=>$cr_info['m_num']));
+
+        return $id;
+    }
+
+    public function career_delete($cr_num){
+        DB::table('career')
+            ->where('cr_num', '=', $cr_num)->delete();
+    }
+
+    ///////////////////////////////////////////////
+
 
     //디자이너 수상 경력을 불러온다.
     public function prize($m_num){
@@ -87,7 +152,9 @@ class Designer_model extends Model
         return $result;
     }
 
+    ////////////////////////////////////////////////
     //디자이너의 자격증 등을 불러온다.
+
     public function licenese($m_num){
         $result=DB::table('licenese')
             ->where('m_num','=',$m_num)->get();
@@ -95,16 +162,57 @@ class Designer_model extends Model
         return $result;
     }
 
+    public function licenese_add($lic_info){
+
+        $id=DB::table('licenese')
+            ->insertGetId(array('lic_name'=>$lic_info['lic_name'],
+                'lic_pyot'=>$lic_info['lic_pyot'],
+                'lic_date'=>$lic_info['lic_date'],
+                'm_num'=>$lic_info['m_num']));
+
+        return $id;
+    }
+
+    public function licenese_delete($lic_num){
+        DB::table('licenese')
+            ->where('lic_num','=',$lic_num)->delete();
+    }
+
+    //////////////////////////////////////////////////
+
     //디자이너의 소개페이지에서 디자이너의 정보를 불러올때 사용
     public function intro($m_num){
 
         $result=DB::table('members')
             ->join('designer','designer.m_num','=','members.m_num')
-            ->where('designer.m_num','=',$m_num)
-            ->select('members.m_num','members.m_name','designer.ds_info')->get();
+            ->where('designer.m_num','=',$m_num)->get();
 
         return $result;
     }
+
+    public function intro_modify($intro_info){
+
+        DB::table('members')
+            ->where('m_num', $intro_info['m_num'])
+            ->update(array('m_name' => $intro_info['m_name'],
+                'm_phone'=>$intro_info['m_phone'],
+                'm_email'=>$intro_info['m_email'],
+                'm_area'=>$intro_info['m_area']));
+
+        DB::table('designer')
+            ->where('m_num',$intro_info['m_num'])
+            ->update(array('ds_info'=>$intro_info['ds_info']));
+
+    }
+
+    public function intro_face_modify($designer_face,$intro_info){
+
+        DB::table('members')
+            ->where('m_num',$intro_info['m_num'])
+            ->update(array('m_face'=>$designer_face));
+
+    }
+
 
     //현재 보류단계
     /*public function m_list_grade(){
@@ -197,5 +305,16 @@ class Designer_model extends Model
         }
 
         return $result;
+    }
+
+    public function portfolio2($m_num){
+
+        $result=DB::table('portfolio')
+            ->where('m_num','=',$m_num)
+            ->get();
+
+        return $result;
+
+
     }
 }
